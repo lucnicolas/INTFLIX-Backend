@@ -15,12 +15,12 @@
 
     <servlet>
         <servlet-name>SeriesManagementServlet</servlet-name>
-        <servlet-class>SeriesManagementServlet</servlet-class>
+        <servlet-class>edu.intech.series.servlet.SeriesServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>SeriesManagementServlet</servlet-name>
-        <url-pattern>/SeriesManagementServlet</url-pattern>
+        <url-pattern>/edu.intech.series.servlet.SeriesServlet</url-pattern>
     </servlet-mapping>
 
 </web-app>

@@ -1,3 +1,5 @@
+package edu.intech.series.servlet;
+
 import edu.intech.series.model.DataProvider;
 
 import javax.servlet.ServletException;
