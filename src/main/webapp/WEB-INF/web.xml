@@ -3,24 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+
     <servlet>
-        <servlet-name>MyServlet</servlet-name>
-        <servlet-class>MyServlet</servlet-class>
+        <servlet-name>SeriesServlet</servlet-name>
+        <servlet-class>SeriesServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>MyServlet</servlet-name>
-        <url-pattern>/MyServlet</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>SeriesManagementServlet</servlet-name>
-        <servlet-class>edu.intech.series.servlet.SeriesServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>SeriesManagementServlet</servlet-name>
-        <url-pattern>/edu.intech.series.servlet.SeriesServlet</url-pattern>
+        <servlet-name>SeriesServlet</servlet-name>
+        <url-pattern>/SeriesServlet</url-pattern>
     </servlet-mapping>
 
 </web-app>

@@ -1,5 +1,3 @@
-package edu.intech.series.servlet;
-
 import edu.intech.series.model.DataProvider;
 
 import javax.servlet.ServletException;
@@ -9,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "SeriesManagementServlet")
+@WebServlet(name = "SeriesServlet")
 public class SeriesServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
