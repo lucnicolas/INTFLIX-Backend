@@ -13,7 +13,7 @@ public class DataProvider {
 	static int lastSaisonId = 0;
 	static int lastEpisodeId = 0;
 
-	private final Map<Integer, Serie> listeSeries;
+	private final Map<Integer, Series> seriesList;
 
 	/**
 	 * Returns the instance of this singleton.
@@ -29,82 +29,82 @@ public class DataProvider {
 	}
 
 	/**
-	 * @return the listeSeries
+	 * @return the seriesList
 	 */
-	public Collection<Serie> getAllSeries() {
-		return this.listeSeries.values();
+	public Collection<Series> getAllSeries() {
+		return this.seriesList.values();
 	}
 
 	/**
-	 * This method adds given Serie to the list of series.
+	 * This method adds given Series to the list of series.
 	 *
-	 * @param s The serie to add. <b>note :</b>given serie id is calculated before
+	 * @param s The series to add. <b>note :</b>given series id is calculated before
 	 *          storing. No need to set it befor calling this method.
-	 * @return the generated id for given Serie
-	 * @throws SeriesException if a Serie already exist with same id.
+	 * @return the generated id for given Series
+	 * @throws SeriesException if a Series already exist with same id.
 	 */
-	public int addSerie(final Serie s) throws SeriesException {
+	public int addSeries(final Series s) throws SeriesException {
 		int nextId = lastSerieId + 1;
-		if (this.listeSeries.get(nextId) != null) {
-			throw new SeriesException("Une série existe déjà avec l'identifiant ".concat(Integer.toString(nextId)));
+		if (this.seriesList.get(nextId) != null) {
+			throw new SeriesException("A series already exist with the id ".concat(Integer.toString(nextId)));
 		}
 		s.setId(++lastSerieId);
-		this.listeSeries.put(nextId, s);
+		this.seriesList.put(nextId, s);
 		return nextId;
 	}
 
 	/**
-	 * This method removes given Serie from the list of series.
+	 * This method removes given Series from the list of series.
 	 *
 	 * @param s the Serie to remove.
-	 * @throws SeriesException if given Serie doesn't exist in the list of series.
+	 * @throws SeriesException if given Series doesn't exist in the list of series.
 	 */
-	public void removeSerie(final Serie s) throws SeriesException {
-		if (this.listeSeries.get(s.getId()) == null) {
-			throw new SeriesException("Aucune série trouvée avec l'identifiant ".concat(Integer.toString(s.getId())));
+	public void removeSeries(final Series s) throws SeriesException {
+		if (this.seriesList.get(s.getId()) == null) {
+			throw new SeriesException("No series found with the id ".concat(Integer.toString(s.getId())));
 		}
-		this.listeSeries.remove(s.getId());
+		this.seriesList.remove(s.getId());
 	}
 
 	/**
-	 * This method return the Serie with given id.
+	 * This method return the Series with given id.
 	 *
-	 * @param serieId Identifier of Serie to return
+	 * @param serieId Identifier of Series to return
 	 * @return the Serie with given id.
-	 * @throws SeriesException if no Serie exists with given id in the list of
+	 * @throws SeriesException if no Series exists with given id in the list of
 	 *                         series.
 	 */
-	public Serie getSerieById(final int serieId) throws SeriesException {
-		Serie ret = this.listeSeries.get(serieId);
+	public Series getSeriesById(final int serieId) throws SeriesException {
+		Series ret = this.seriesList.get(serieId);
 		if (ret == null) {
-			throw new SeriesException("Aucune série trouvée avec l'identifiant ".concat(Integer.toString(serieId)));
+			throw new SeriesException("No series found with id ".concat(Integer.toString(serieId)));
 		}
 		return ret;
 	}
 
 	/**
-	 * This method returns the Saison corresponding with given Ids
+	 * This method returns the Season corresponding with given Ids
 	 *
-	 * @param serieId  Identifier of the Serie to search for the wanted Saison
-	 * @param saisonId Identifier of the Saison to find
+	 * @param seriesId  Identifier of the Series to search for the wanted Saison
+	 * @param seasonId Identifier of the Season to find
 	 * @return Saison corresponding to given ids.
 	 * @throws SeriesException if
 	 *                         <ul>
-	 *                         <li>either no Serie has been found with given
+	 *                         <li>either no Series has been found with given
 	 *                         ID.</li>
-	 *                         <li>or the Serie has been found but doesn't contain a
-	 *                         Saison with given ID.</li>
+	 *                         <li>or the Series has been found but doesn't contain a
+	 *                         Season with given ID.</li>
 	 *                         </ul>
 	 */
-	public Saison getSaisonByIds(final int serieId, final int saisonId) throws SeriesException {
-		Serie s = this.listeSeries.get(serieId);
+	public Season getSeasonByIds(final int seriesId, final int seasonId) throws SeriesException {
+		Series s = this.seriesList.get(seriesId);
 		if (s == null) {
-			throw new SeriesException("Aucune série trouvée avec l'identifiant ".concat(Integer.toString(serieId)));
+			throw new SeriesException("No series found with id ".concat(Integer.toString(seriesId)));
 		}
-		Saison ret = s.getSaisonById(saisonId);
+		Season ret = s.getSeasonById(seasonId);
 		if (ret == null) {
-			throw new SeriesException("Aucune saison trouvée avec l'identifiant ".concat(Integer.toString(saisonId))
-					.concat(" dans la série ayant l'identifiant ").concat(Integer.toString(serieId)));
+			throw new SeriesException("No season found with id".concat(Integer.toString(seasonId))
+					.concat(" in the series with id ").concat(Integer.toString(seriesId)));
 		}
 		return ret;
 	}
@@ -112,8 +112,8 @@ public class DataProvider {
 	/**
 	 * This method returns the Episode corresponding with given Ids
 	 *
-	 * @param serieId   Identifier of the Serie to search for the wanted Episode
-	 * @param saisonId  Identifier of the Saison to search for the wanted Episode
+	 * @param seriesId   Identifier of the Serie to search for the wanted Episode
+	 * @param seasonId  Identifier of the Saison to search for the wanted Episode
 	 * @param episodeId Identifier of the Episode to find
 	 * @return Episode corresponding to given ids.
 	 * @throws SeriesException if
@@ -126,21 +126,21 @@ public class DataProvider {
 	 *                         Saison doesn't contain a Episode with given ID.</li>
 	 *                         </ul>
 	 */
-	public Episode getEpisodeByIds(final int serieId, final int saisonId, final int episodeId) throws SeriesException {
-		Serie s = this.listeSeries.get(serieId);
+	public Episode getEpisodeByIds(final int seriesId, final int seasonId, final int episodeId) throws SeriesException {
+		Series s = this.seriesList.get(seriesId);
 		if (s == null) {
-			throw new SeriesException("Aucune série trouvée avec l'identifiant ".concat(Integer.toString(serieId)));
+			throw new SeriesException("No series found with id ".concat(Integer.toString(seriesId)));
 		}
-		Saison s2 = s.getSaisonById(saisonId);
+		Season s2 = s.getSeasonById(seasonId);
 		if (s2 == null) {
-			throw new SeriesException("Aucune saison trouvée avec l'identifiant ".concat(Integer.toString(saisonId))
-					.concat(" dans la série ayant l'identifiant ").concat(Integer.toString(serieId)));
+			throw new SeriesException("No season found with id ".concat(Integer.toString(seasonId))
+					.concat(" in series found with id ").concat(Integer.toString(seriesId)));
 		}
 		Episode e = s2.getEpisodeById(episodeId);
 		if (e == null) {
-			throw new SeriesException("Aucun épisode trouvé avec l'identifiant ".concat(Integer.toString(episodeId))
-					.concat(" dans la saison ayant l'identifiant ").concat(Integer.toString(saisonId))
-					.concat(" de la série ayant l'identifiant ").concat(Integer.toString(serieId)));
+			throw new SeriesException("No episode found with id ".concat(Integer.toString(episodeId))
+					.concat(" in season with id ").concat(Integer.toString(seasonId))
+					.concat(" in series with id ").concat(Integer.toString(seriesId)));
 		}
 		return e;
 	}
@@ -149,13 +149,13 @@ public class DataProvider {
 	 * private constructor
 	 */
 	private DataProvider() {
-		this.listeSeries = new HashMap<Integer, Serie>();
+		this.seriesList = new HashMap<Integer, Series>();
 		initData();
 	}
 
 	private void initData() {
-		Serie got = new Serie("Game of Thrones");
-		Saison got1 = new Saison("Season one", 1);
+		Series got = new Series("Game of Thrones");
+		Season got1 = new Season("Season one", 1);
 		Episode got11 = new Episode("Winter is coming", 1);
 		Episode got12 = new Episode("The Kingsroad", 2);
 		Episode got13 = new Episode("Lord Snow", 3);
@@ -164,7 +164,7 @@ public class DataProvider {
 		Episode got16 = new Episode("A Golden Crown", 6);
 		Episode got17 = new Episode("You Win or You Die", 7);
 		Episode got18 = new Episode("The Pointy End", 8);
-		Saison got2 = new Saison("Season two", 2);
+		Season got2 = new Season("Season two", 2);
 		Episode got21 = new Episode("The North Remembers", 1);
 		Episode got22 = new Episode("The Night Lands", 2);
 		Episode got23 = new Episode("What Is Dead May Never Die", 3);
@@ -182,7 +182,7 @@ public class DataProvider {
 			got1.addEpisode(got16);
 			got1.addEpisode(got17);
 			got1.addEpisode(got18);
-			got.addSaison(got1);
+			got.addSeason(got1);
 			got2.addEpisode(got21);
 			got2.addEpisode(got22);
 			got2.addEpisode(got23);
@@ -191,14 +191,14 @@ public class DataProvider {
 			got2.addEpisode(got26);
 			got2.addEpisode(got27);
 			got2.addEpisode(got28);
-			got.addSaison(got2);
-			addSerie(got);
+			got.addSeason(got2);
+			addSeries(got);
 
 		} catch (SeriesException e) {
 			e.printStackTrace();
 		}
-		Serie tgp = new Serie("The Good Place");
-		Saison tgp1 = new Saison("Season one", 1);
+		Series tgp = new Series("The Good Place");
+		Season tgp1 = new Season("Season one", 1);
 		Episode tgp11 = new Episode("Pilot", 1);
 		Episode tgp12 = new Episode("Flying", 2);
 		Episode tgp13 = new Episode("Tahani Al-Jamil", 3);
@@ -207,7 +207,7 @@ public class DataProvider {
 		Episode tgp16 = new Episode("What We Owe to Each Other", 6);
 		Episode tgp17 = new Episode("The Eternal Shriek", 7);
 		Episode tgp18 = new Episode("Most Improved Player", 8);
-		Saison tgp2 = new Saison("Season two", 2);
+		Season tgp2 = new Season("Season two", 2);
 		Episode tgp21 = new Episode("Everything Is Great!", 1);
 		Episode tgp22 = new Episode("Dance Dance Resolution", 2);
 		Episode tgp23 = new Episode("Team Cockroach", 3);
@@ -225,7 +225,7 @@ public class DataProvider {
 			tgp1.addEpisode(tgp16);
 			tgp1.addEpisode(tgp17);
 			tgp1.addEpisode(tgp18);
-			tgp.addSaison(tgp1);
+			tgp.addSeason(tgp1);
 			tgp2.addEpisode(tgp21);
 			tgp2.addEpisode(tgp22);
 			tgp2.addEpisode(tgp23);
@@ -234,8 +234,8 @@ public class DataProvider {
 			tgp2.addEpisode(tgp26);
 			tgp2.addEpisode(tgp27);
 			tgp2.addEpisode(tgp28);
-			tgp.addSaison(tgp2);
-			addSerie(tgp);
+			tgp.addSeason(tgp2);
+			addSeries(tgp);
 
 		} catch (SeriesException e) {
 			e.printStackTrace();

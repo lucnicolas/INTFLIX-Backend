@@ -6,20 +6,20 @@ import java.util.Map;
 
 import edu.intech.series.exception.SeriesException;
 
-public class Saison {
+public class Season {
 
 	private int id = -1;
-	private int numero;
-	private final String nom;
-	private boolean toutVu = false;
+	private int number;
+	private final String name;
+	private boolean seen = false;
 	private final Map<Integer, Episode> episodes = new HashMap<Integer, Episode>();
 
 	/**
-	 * @param nom Nom de la saison.
+	 * @param name Season name.
 	 */
-	public Saison(final String nom, final int numero) {
-		this.nom = nom;
-		this.numero = numero;
+	public Season(final String name, final int number) {
+		this.name = name;
+		this.number = number;
 	}
 
 	/**
@@ -37,28 +37,28 @@ public class Saison {
 	}
 
 	/**
-	 * @return the numero
+	 * @return the number
 	 */
-	public int getNumero() {
-		return this.numero;
+	public int getNumber() {
+		return this.number;
 	}
 
 	/**
-	 * @param numero the numero to set
+	 * @param number the number to set
 	 */
-	public void setNumero(final int numero) {
-		this.numero = numero;
+	public void setNumber(final int number) {
+		this.number = number;
 	}
 
 	/**
-	 * @return the nom
+	 * @return the name
 	 */
-	public final String getNom() {
-		return this.nom;
+	public final String getName() {
+		return this.name;
 	}
 
 	/**
-	 * @return the saisons
+	 * @return the season
 	 */
 	public final Collection<Episode> getEpisodes() {
 		return this.episodes.values();
@@ -75,7 +75,7 @@ public class Saison {
 	public int addEpisode(final Episode e) throws SeriesException {
 		int nextId = DataProvider.lastEpisodeId + 1;
 		if (this.episodes.get(nextId) != null) {
-			throw new SeriesException("Un épisode existe déjà avec l'identifiant ".concat(Integer.toString(nextId)));
+			throw new SeriesException("An episode already exist with the id ".concat(Integer.toString(nextId)));
 		}
 		e.setId(++DataProvider.lastEpisodeId);
 		this.episodes.put(nextId, e);
@@ -91,29 +91,29 @@ public class Saison {
 	 */
 	public void removeEpisode(final Episode e) throws SeriesException {
 		if (this.episodes.get(e.getId()) == null) {
-			throw new SeriesException("Aucun épisode trouvée avec l'identifiant ".concat(Integer.toString(e.getId())));
+			throw new SeriesException("No episode found with the id ".concat(Integer.toString(e.getId())));
 		}
 		this.episodes.remove(e.getId());
 	}
 
 	/**
-	 * @param toutVu the toutVu to set
+	 * @param seen the seen to set
 	 */
-	public final void setToutVu(final boolean toutVu) {
-		this.toutVu = toutVu;
+	public final void setSeen(final boolean seen) {
+		this.seen = seen;
 	}
 
-	public boolean isToutVu() {
-		this.toutVu = true;
+	public boolean isSeen() {
+		this.seen = true;
 		if (this.episodes.size() > 0) {
 			for (Episode e : this.episodes.values()) {
-				if (!e.isVu()) {
-					this.toutVu = false;
-					return this.toutVu;
+				if (!e.isSeen()) {
+					this.seen = false;
+					return this.seen;
 				}
 			}
 		}
-		return this.toutVu;
+		return this.seen;
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class Saison {
 
 	@Override
 	public String toString() {
-		return getNom();
+		return getName();
 	}
 
 	@Override
@@ -139,10 +139,10 @@ public class Saison {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (!(obj instanceof Saison)) {
+		if (!(obj instanceof Season)) {
 			return false;
 		}
-		return ((Saison) obj).getId() == getId();
+		return ((Season) obj).getId() == getId();
 	}
 
 }
