@@ -25,7 +25,7 @@ public class MyServlet extends HttpServlet {
             writer.println("<body>");
 
             writer.println("<h1>This is a simple java servlet.</h1>");
-            writer.println("Your name is " + request.getParameter("name"));
+            writer.println("<p>Your name is " + request.getParameter("name") + "</p>");
             writer.println("<a href=\"./?name=Luc\">Retour à la page d'accueil</a>");
 
             writer.println("</body>");
