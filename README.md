@@ -89,11 +89,14 @@ Make sure that the name of your servlet matches the specified case.
    - Map the WAR artifact output directory [PROJECT_PATH]/target to the Tomcat server deployment directory /usr/local/tomcat/webapps.
 <img src="https://www.jetbrains.com/help/img/idea/2020.2/docker_tutorial_deploy_java_web_app_in_tomcat.png"/>
 Click Run to start the container.
+
 5. SSH into the container :
-    ```
-    docker exec -it TomcatContainer /bin/bash`
+
+```docker
+    docker exec -it TomcatContainer /bin/bash
     cp -r webapps.dist/* webapps/
-    ```
+```
+
 5. When the container starts, open the following address in your web browser: http://127.0.0.1:8080/DockerJavaWebApp-1.0-SNAPSHOT/
    You should see the following page:
    <img src="https://www.jetbrains.com/help/img/idea/2020.2/DockerJavaWebApp-browser.png"/>
