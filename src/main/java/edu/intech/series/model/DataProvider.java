@@ -1,10 +1,13 @@
 package edu.intech.series.model;
 
+import edu.intech.series.exception.SeriesException;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import edu.intech.series.exception.SeriesException;
 
 public class DataProvider {
 
@@ -13,13 +16,14 @@ public class DataProvider {
 	static int lastSaisonId = 0;
 	static int lastEpisodeId = 0;
 
+	private final static String URL = "jdbc:sqlite:/usr/local/tomcat/webapps/SeriesManager.db";
+
 	private final Map<Integer, Series> seriesList;
 
 	/**
 	 * Returns the instance of this singleton.
 	 *
 	 * @return the instance of this singleton.
-	 *
 	 */
 	public static final DataProvider getInstance() {
 		if (instance == null) {
@@ -149,6 +153,14 @@ public class DataProvider {
 	 * private constructor
 	 */
 	private DataProvider() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			Connection connection = DriverManager.getConnection(URL);
+			System.out.println("SUCCESSFULLY CONNECTED TO DATABASE");
+		} catch (ClassNotFoundException | SQLException e) {
+			System.out.println("FAILED TO CONNECT TO DATABASE");
+			e.printStackTrace();
+		}
 		this.seriesList = new HashMap<Integer, Series>();
 		initData();
 	}
