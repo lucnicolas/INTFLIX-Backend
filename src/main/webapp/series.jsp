@@ -74,15 +74,19 @@
 						<td class="filler">&nbsp;</td>
 						<td class="${ episode.seen } Episode">${ episode.title }</td>
 						<td class="${ episode.seen }">
-							<form method="post" action="./etat">
-								<input type=hidden name="episode" value="${ episode.id }" />
+
+							<form method="post" action="./etat/">
+								<input type="hidden" name="serie" value="${ serie.id }"/>
+								<input type="hidden" name="saison" value="${ season.id }"/>
+								<input type=hidden name="episode" value="${ episode.id }"/>
 								<button type="submit" title="changer d'état">
 									<img alt="changer d'état" src="./img/EyeChange_small.png">
 								</button>
 							</form>
+
 							<form method="post" action="./supprimerEpisode">
-								<input type="hidden" name="saison" value="${ season.id }" />
-								<input type=hidden name="episode" value="${ episode.id }" />
+								<input type="hidden" name="saison" value="${ season.id }"/>
+								<input type=hidden name="episode" value="${ episode.id }"/>
 								<button title="Supprimer l'épisode">
 									<img src="./img/Remove.png">
 								</button>
