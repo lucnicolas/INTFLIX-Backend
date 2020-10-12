@@ -7,6 +7,15 @@ import java.util.Map;
 import edu.intech.series.dao.DaoFactory;
 import edu.intech.series.exception.SeriesException;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Season")
+@NamedQueries({
+		@NamedQuery(name = "Saison.findAll", query = "SELECT s FROM Season s"),
+		@NamedQuery(name = "Saison.findBySerie",
+				query = "SELECT sais FROM Series ser, IN(ser.season) sais WHERE ser.id = :id")
+})
 public class Season {
 
 	private int id = -1;
@@ -26,6 +35,9 @@ public class Season {
 	/**
 	 * @return the id
 	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", updatable = false)
 	public int getId() {
 		return this.id;
 	}
@@ -40,6 +52,7 @@ public class Season {
 	/**
 	 * @return the number
 	 */
+	@Column(name = "number")
 	public int getNumber() {
 		return this.number;
 	}
@@ -54,6 +67,7 @@ public class Season {
 	/**
 	 * @return the name
 	 */
+	@Column(name = "name")
 	public final String getName() {
 		return this.name;
 	}
@@ -61,6 +75,10 @@ public class Season {
 	/**
 	 * @return the season
 	 */
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumns({
+			@JoinColumn(name = "fk_series", referencedColumnName = "id")
+	})
 	public final Collection<Episode> getEpisodes() {
 		return this.episodes.values();
 	}

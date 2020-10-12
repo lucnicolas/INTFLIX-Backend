@@ -1,5 +1,15 @@
 package edu.intech.series.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Episode")
+@NamedQueries({
+		@NamedQuery(name = "Episode.findAll", query = "SELECT e FROM Episode e"),
+		@NamedQuery(name = "Episode.findBySeries",
+				query = "SELECT e FROM Season seas, IN(seas.episodes) e WHERE seas.id = :id")
+})
+
 public class Episode {
 
 	private int id = -1;
@@ -19,6 +29,9 @@ public class Episode {
 	/**
 	 * @return the id
 	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", updatable = false)
 	public int getId() {
 		return this.id;
 	}
@@ -33,6 +46,7 @@ public class Episode {
 	/**
 	 * @return the title
 	 */
+	@Column(name = "title")
 	public final String getTitle() {
 		return this.title;
 	}
@@ -40,6 +54,7 @@ public class Episode {
 	/**
 	 * @return the number
 	 */
+	@Column(name = "number")
 	public final int getNumber() {
 		return this.number;
 	}
@@ -47,6 +62,7 @@ public class Episode {
 	/**
 	 * @return the seen
 	 */
+	@Column(name = "seen")
 	public final boolean isSeen() {
 		return this.seen;
 	}

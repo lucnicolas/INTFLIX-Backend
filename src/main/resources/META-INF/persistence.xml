@@ -4,6 +4,8 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
     <persistence-unit name="default">
-
+        <class>edu.intech.series.model.Series</class>
+        <class>edu.intech.series.model.Season</class>
+        <class>edu.intech.series.model.Episode</class>
     </persistence-unit>
 </persistence>
