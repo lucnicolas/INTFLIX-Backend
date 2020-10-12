@@ -1,35 +1,99 @@
-package edu.intech.series.model;
+package edu.intech.series.dao;
 
+import edu.intech.series.dao.exception.DaoException;
+import edu.intech.series.dao.impl.db.EpisodeDaoImplDb;
+import edu.intech.series.dao.impl.db.SeasonDaoImplDb;
+import edu.intech.series.dao.impl.db.SeriesDaoImplDb;
+import edu.intech.series.dao.interfaces.IEpisodeDao;
+import edu.intech.series.dao.interfaces.ISeasonDao;
+import edu.intech.series.dao.interfaces.ISeriesDao;
 import edu.intech.series.exception.SeriesException;
+import edu.intech.series.model.Episode;
+import edu.intech.series.model.Season;
+import edu.intech.series.model.Series;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataProvider {
+public class DaoFactory {
 
-	private static DataProvider instance;
-	static int lastSerieId = 0;
-	static int lastSaisonId = 0;
-	static int lastEpisodeId = 0;
+	public static int lastSeriesId = 0;
+	public static int lastSeasonId = 0;
+	public static int lastEpisodeId = 0;
 
-	private final static String URL = "jdbc:sqlite:/usr/local/tomcat/webapps/SeriesManager.db";
+	private Connection connection;
+	private SeriesDaoImplDb seriesDao;
+	private SeasonDaoImplDb seasonDao;
+	private EpisodeDaoImplDb episodeDao;
+
+	private static DaoFactory instance;
+
+	//private final static String URL = "jdbc:sqlite:/usr/local/tomcat/webapps/GestionSeries.db";
+	private final static String URL = "jdbc:mysql://mysql-localhost:3306/intflix_db";
 
 	private final Map<Integer, Series> seriesList;
+
+	private final Map<String, PreparedStatement> preparedStatements = new HashMap<String, PreparedStatement>();
+
+	public PreparedStatement getPreparedStatement(final String request) throws SQLException {
+		if (!this.preparedStatements.containsKey(request)) {
+			this.preparedStatements.put(request, this.connection.prepareStatement(request));
+		}
+		return this.preparedStatements.get(request);
+	}
 
 	/**
 	 * Returns the instance of this singleton.
 	 *
 	 * @return the instance of this singleton.
 	 */
-	public static final DataProvider getInstance() {
+	public static final DaoFactory getInstance() {
 		if (instance == null) {
-			instance = new DataProvider();
+			instance = new DaoFactory();
 		}
 		return instance;
+	}
+
+	public Connection getConnection() {
+		return this.connection;
+	}
+
+	public ISeriesDao getSeriesDao() {
+		if (this.seriesDao == null) {
+			this.seriesDao = new SeriesDaoImplDb(this.getConnection(), this);
+		}
+		return this.seriesDao;
+	}
+
+	public ISeasonDao getSeasonDao() {
+		if (this.seasonDao == null) {
+			this.seasonDao = new SeasonDaoImplDb(this.getConnection());
+		}
+		return this.seasonDao;
+	}
+
+	public IEpisodeDao getEpisodeDao() {
+		if (this.episodeDao == null) {
+			this.episodeDao = new EpisodeDaoImplDb(this.getConnection());
+		}
+		return this.episodeDao;
+	}
+
+	public void closeAll() throws DaoException {
+		try {
+			for (PreparedStatement s : this.preparedStatements.values()) {
+				s.close();
+			}
+			this.preparedStatements.clear();
+			this.connection.close();
+		} catch (SQLException e) {
+			throw new DaoException("impossible de fermer les statments", e);
+		}
 	}
 
 	/**
@@ -48,11 +112,11 @@ public class DataProvider {
 	 * @throws SeriesException if a Series already exist with same id.
 	 */
 	public int addSeries(final Series s) throws SeriesException {
-		int nextId = lastSerieId + 1;
+		int nextId = lastSeriesId + 1;
 		if (this.seriesList.get(nextId) != null) {
 			throw new SeriesException("A series already exist with the id ".concat(Integer.toString(nextId)));
 		}
-		s.setId(++lastSerieId);
+		s.setId(++lastSeriesId);
 		this.seriesList.put(nextId, s);
 		return nextId;
 	}
@@ -152,10 +216,12 @@ public class DataProvider {
 	/**
 	 * private constructor
 	 */
-	private DataProvider() {
+	private DaoFactory() {
+		System.out.println("Connecting database...");
 		try {
-			Class.forName("org.sqlite.JDBC");
-			Connection connection = DriverManager.getConnection(URL);
+			//Class.forName("org.sqlite.JDBC");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			this.connection = DriverManager.getConnection(URL, "root", "root");
 			System.out.println("SUCCESSFULLY CONNECTED TO DATABASE");
 		} catch (ClassNotFoundException | SQLException e) {
 			System.out.println("FAILED TO CONNECT TO DATABASE");

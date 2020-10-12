@@ -1,6 +1,6 @@
 package edu.intech.series.dao.interfaces;
 
-import edu.intech.series.dao.DaoException;
+import edu.intech.series.dao.exception.DaoException;
 import edu.intech.series.model.Season;
 
 import java.util.List;

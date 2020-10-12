@@ -1,4 +1,4 @@
-package edu.intech.series.dao;
+package edu.intech.series.dao.exception;
 
 public class DaoConfigurationException extends RuntimeException {
     /*

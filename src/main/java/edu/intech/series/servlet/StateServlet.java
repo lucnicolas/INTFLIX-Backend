@@ -1,7 +1,7 @@
 package edu.intech.series.servlet;
 
 import edu.intech.series.exception.SeriesException;
-import edu.intech.series.model.DataProvider;
+import edu.intech.series.dao.DaoFactory;
 import edu.intech.series.model.Episode;
 
 import javax.servlet.ServletException;
@@ -14,7 +14,7 @@ import java.io.IOException;
 @WebServlet(name = "StateServlet", urlPatterns = "/etat/")
 public class StateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DataProvider data = DataProvider.getInstance();
+        DaoFactory data = DaoFactory.getInstance();
         int serieId = Integer.parseInt(request.getParameter("serie"));
         int seasonId = Integer.parseInt(request.getParameter("saison"));
         int episodeId = Integer.parseInt(request.getParameter("episode"));

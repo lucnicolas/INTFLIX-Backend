@@ -1,6 +1,7 @@
 package edu.intech.series.servlet;
 
-import edu.intech.series.model.DataProvider;
+import edu.intech.series.dao.DaoFactory;
+import edu.intech.series.dao.exception.DaoException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +17,12 @@ public class SeriesServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("series", DataProvider.getInstance().getAllSeries());
+        try {
+            request.setAttribute("series", DaoFactory.getInstance().getSeriesDao().readAllSeries());
+        } catch (DaoException e) {
+            request.setAttribute("erreur", e.getMessage());
+            e.printStackTrace();
+        }
         this.getServletContext().getRequestDispatcher("/series.jsp").forward(request, response);
     }
 }

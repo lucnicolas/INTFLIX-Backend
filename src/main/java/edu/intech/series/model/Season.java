@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.intech.series.dao.DaoFactory;
 import edu.intech.series.exception.SeriesException;
 
 public class Season {
@@ -73,11 +74,11 @@ public class Season {
 	 * @throws SeriesException if a Episode already exist with same id.
 	 */
 	public int addEpisode(final Episode e) throws SeriesException {
-		int nextId = DataProvider.lastEpisodeId + 1;
+		int nextId = DaoFactory.lastEpisodeId + 1;
 		if (this.episodes.get(nextId) != null) {
 			throw new SeriesException("An episode already exist with the id ".concat(Integer.toString(nextId)));
 		}
-		e.setId(++DataProvider.lastEpisodeId);
+		e.setId(++DaoFactory.lastEpisodeId);
 		this.episodes.put(nextId, e);
 		return nextId;
 	}
